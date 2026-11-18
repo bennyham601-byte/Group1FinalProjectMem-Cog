@@ -38,8 +38,8 @@ main{max-width:850px;margin:28px auto 70px;padding:0 20px}.panel{background:var(
 <p class="prompt" id="prompt"></p>
 <div class="choices" id="choices"></div>
 <div class="confidence">
-<div class="confidence-top"><div><h3>How confident are you?</h3><span class="small">Rate your confidence in the answer you selected.</span></div><output id="confidenceValue">70%</output></div>
-<input id="confidence" type="range" min="50" max="100" step="5" value="70"><div class="range-labels"><span>50% · Guessing</span><span>100% · Certain</span></div>
+<div class="confidence-top"><div><h3>How confident are you?</h3><span class="small">Rate your confidence in the answer you selected.</span></div><output id="confidenceValue" aria-live="polite">Move the slider</output></div>
+<input id="confidence" type="range" min="1" max="100" step="1" value="50" aria-label="Confidence level, from 1 to 100 percent"><div class="range-labels"><span>1% · Not confident</span><span>100% · Certain</span></div>
 </div>
 <button class="btn primary continue" id="next" disabled>Next question →</button>
 </section>
@@ -117,7 +117,7 @@ function render(){
  $("count").textContent=`Question ${idx+1} of ${items.length}`;$("progress").style.width=`${idx/items.length*100}%`;
  $("category").textContent=item.cat;$("prompt").textContent=item.q;$("choices").innerHTML="";
  item.a.forEach((answer,i)=>{const b=document.createElement("button");b.className="choice";b.innerHTML=`${String.fromCharCode(65+i)}. ${answer}<small>Select this answer</small>`;b.addEventListener("click",()=>{selected=i;document.querySelectorAll(".choice").forEach((el,j)=>el.classList.toggle("selected",j===i));$("next").disabled=false});$("choices").appendChild(b)});
- $("confidence").value=70;$("confidenceValue").textContent="70%";$("next").disabled=true;$("next").textContent=idx===items.length-1?"See my results →":"Next question →";
+ $("confidence").value=50;$("confidenceValue").textContent="Move the slider";$("next").disabled=true;$("next").textContent=idx===items.length-1?"See my results →":"Next question →";
 }
 $("confidence").addEventListener("input",e=>$("confidenceValue").textContent=e.target.value+"%");
 $("next").addEventListener("click",()=>{if(selected===null)return;const item=items[order[idx]];responses.push({itemIndex:order[idx],selected,correct:selected===item.correct,confidence:Number($("confidence").value),time:new Date().toISOString()});idx++;if(idx<items.length)render();else finish()});
